@@ -1,7 +1,7 @@
-package Handler;
+package com.example.Spring_Transaction_Example.Handler;
 
-import Entity.Product;
-import Repository.InventoryRepository;
+import com.example.Spring_Transaction_Example.Entity.Product;
+import com.example.Spring_Transaction_Example.Repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

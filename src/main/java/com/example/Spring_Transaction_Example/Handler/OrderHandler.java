@@ -1,7 +1,7 @@
-package Handler;
+package com.example.Spring_Transaction_Example.Handler;
 
-import Entity.Order;
-import Repository.OrderRepository;
+import com.example.Spring_Transaction_Example.Entity.Order;
+import com.example.Spring_Transaction_Example.Repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
