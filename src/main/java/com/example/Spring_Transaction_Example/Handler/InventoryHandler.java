@@ -4,6 +4,8 @@ import com.example.Spring_Transaction_Example.Entity.Product;
 import com.example.Spring_Transaction_Example.Repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class InventoryHandler
@@ -17,6 +19,7 @@ public class InventoryHandler
     }
 
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Product updateProductDetails(Product product)
     {
         //forcefully added the exception simulate the transaction

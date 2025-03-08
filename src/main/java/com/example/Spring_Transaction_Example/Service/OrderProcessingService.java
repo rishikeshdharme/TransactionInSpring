@@ -2,6 +2,7 @@ package com.example.Spring_Transaction_Example.Service;
 
 import com.example.Spring_Transaction_Example.Entity.Order;
 import com.example.Spring_Transaction_Example.Entity.Product;
+import com.example.Spring_Transaction_Example.Handler.AuditLogHandler;
 import com.example.Spring_Transaction_Example.Handler.InventoryHandler;
 import com.example.Spring_Transaction_Example.Handler.OrderHandler;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ public class OrderProcessingService
 {
    private OrderHandler orderHandler;
    private InventoryHandler inventoryHandler;
+   private AuditLogHandler auditLogHandler;
 
-    public OrderProcessingService(InventoryHandler inventoryHandler,OrderHandler orderHandler) {
+    public OrderProcessingService(InventoryHandler inventoryHandler,OrderHandler orderHandler,AuditLogHandler auditLogHandler) {
         this.inventoryHandler = inventoryHandler;
         this.orderHandler = orderHandler;
+        this.auditLogHandler = auditLogHandler;
     }
 
     @Transactional(readOnly = false,propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED)
@@ -32,13 +35,18 @@ public class OrderProcessingService
 
         //update the total price in order entity
         order.setTotalprice(order.getQuantity()* product.getPrice());
+        Order order1 =null;
+        try {
+            //save order
+             order1 = orderHandler.saveOrder(order);
 
-        //save order
-        Order order1=orderHandler.saveOrder(order);
-
-        //update the stock
-        updateInventoryStock(product, order1);
-
+            //update the stock
+            updateInventoryStock(product, order1);
+            auditLogHandler.logAuditDetails(order,"audit successfull");
+        }catch (Exception e)
+        {
+            auditLogHandler.logAuditDetails(order,"audit falied");
+        }
 
         return order1;
     }
