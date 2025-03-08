@@ -5,6 +5,9 @@ import com.example.Spring_Transaction_Example.Entity.Product;
 import com.example.Spring_Transaction_Example.Handler.InventoryHandler;
 import com.example.Spring_Transaction_Example.Handler.OrderHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderProcessingService
@@ -17,11 +20,12 @@ public class OrderProcessingService
         this.orderHandler = orderHandler;
     }
 
+    @Transactional(readOnly = false,propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED)
     public Order placeAndOrder(Order order)
     {
         //get product from inventory
         System.out.println("Order class: " + order.getClass().getName());
-        Product product = inventoryHandler.getProduct(order.getId());
+        Product product = inventoryHandler.getProduct(order.getProductId());
 
         //validate stock availability<(5)
         validateStockAvailability(order, product);

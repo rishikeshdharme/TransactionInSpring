@@ -19,6 +19,12 @@ public class InventoryHandler
 
     public Product updateProductDetails(Product product)
     {
+        //forcefully added the exception simulate the transaction
+        if(product.getPrice()>2000)
+        {
+            throw new RuntimeException("Db Crashed..");
+        }
+
         return inventoryrepo.save(product);
     }
 
@@ -26,7 +32,7 @@ public class InventoryHandler
     {
         return inventoryrepo.findById(id)
                 .orElseThrow(
-                        ()-> new RuntimeException("Product not found")
+                        ()-> new RuntimeException("Product not found"+id)
                 );
 
     }
